@@ -13,9 +13,9 @@ jobs:
     steps:
       - name: update labels when user responds
         uses: actions/github-script@v6
-        if: ${{ github.event.comment.user.login == github.event.issue.user.login && contains(github.event.issue.labels.*.name, 'wait for update') && !contains(github.event.issue.labels.*.name, 'user responded') }}
+        if: 
         with:
-          script: |
+          script: ${{ (github.event.comment.user.login == github.event.issue.user.login && contains(github.event.issue.labels.*.name, 'wait for update') && !contains(github.event.issue.labels.*.name, 'user responded')) || ( contains(github.event.pull_request.labels.*.name, 'wait for update') && github.event.pull_request_review_comment.user.login == github.event.pull_request.user.login ) || ( contains(github.event.pull_request.labels.*.name, 'wait for update') && !contains(github.event.pull_request.labels.*.name, 'user responded') ) }}
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -26,6 +26,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels:[],
               name: "wait for update"
             })
