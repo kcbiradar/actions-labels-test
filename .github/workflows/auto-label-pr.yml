@@ -11,16 +11,15 @@ on:
 
 env:
   ACTIONS_RUNNER_DEBUG: true
-  comment_user: ${{github.event.comment.user.login}}
-  issue_user: ${{github.event.issue.user.login}}
-  pr_review_user: ${{github.event.pull_request_review_comment.user.login}}
-  pr_user: ${{github.event.pull_request.user.login}}
-
-
 
 jobs:
   run-check:
     runs-on: ubuntu-latest
+    env:
+      comment_user: ${{github.event.comment.user.login}}
+      issue_user: ${{github.event.issue.user.login}}
+      pr_review_user: ${{github.event.pull_request_review_comment.user.login}}
+      pr_user: ${{github.event.pull_request.user.login}}
     steps:
       - name: Remove `wait for update` label on push
         uses: actions/github-script@v6
